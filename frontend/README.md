@@ -1,54 +1,61 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a modern inventory management dashboard with a React 19 frontend and a Spring Boot backend.
 
-Currently, two official plugins are available:
+> **Note:** AI (Copilot) was utilized to make improvements.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- Product CRUD with modal forms
+- Category, search, and availability filtering
+- Sorting and pagination
+- Metrics dashboard (fetched from backend)
+- Robust error handling for all API calls
+- Async save UX: Save button disables and shows 'Saving...' while saving
+- Accessible UI (aria-labels, keyboard navigation)
+- Comprehensive integration and component tests (Vitest + Testing Library)
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Backend
+1. Navigate to the `backend` directory.
+2. Ensure Java 17+ and Maven are installed.
+3. Start the backend:
+   ```sh
+   mvn spring-boot:run
+   ```
+4. The backend runs at [http://localhost:9090](http://localhost:9090).
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Frontend
+1. Navigate to the `frontend` directory.
+2. Ensure Node.js and npm are installed.
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+4. Start the frontend:
+   ```sh
+   npm run dev
+   ```
+5. The frontend runs at [http://localhost:8080](http://localhost:8080).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Testing
+- Run all frontend tests:
+  ```sh
+  npm run test
+  ```
+- Tests cover integration, API, and all major UI flows.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Troubleshooting
+- **Metrics not loading / 500 error:**
+  - Ensure the backend is running and port 9090 is free.
+  - If you see a 500 error on `/api/products/metrics`, make sure the backend DTOs have public no-arg constructors and Jackson annotations (see `MetricsResponse.java`).
+  - Restart the backend after any DTO changes.
+- **Frontend Save button stuck on 'Saving...':**
+  - This means the save API call failed. Check the error message at the top of the page and ensure the backend is reachable.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Accessibility
+- All form fields and buttons have accessible labels.
+- Modal and table actions are keyboard accessible.
+
+## License
+MIT
