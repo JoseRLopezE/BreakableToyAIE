@@ -25,4 +25,8 @@ public class ProductRepository {
     public void deleteById(String id) {
         productMap.remove(id);
     }
+
+    public void clear() {
+        productMap.clear();
+    }
 }

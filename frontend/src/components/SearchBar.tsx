@@ -39,20 +39,23 @@ export function SearchBar({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Search Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <label htmlFor="search-name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
           <input
+            id="search-name"
             type="text"
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            aria-label="Search Name"
           />
         </div>
 
         {/* Categories Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Categories</label>
+          <label htmlFor="search-categories" className="block text-sm font-medium text-gray-700 mb-1">Categories</label>
           <Select
+            inputId="search-categories"
             isMulti
             value={categoryOptions.filter((option) =>
               selectedCategories.includes(option.value)
@@ -61,16 +64,19 @@ export function SearchBar({
             options={categoryOptions}
             className="w-full"
             placeholder="Select categories"
+            aria-label="Search Categories"
           />
         </div>
 
         {/* Availability Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+          <label htmlFor="search-availability" className="block text-sm font-medium text-gray-700 mb-1">Availability</label>
           <select
+            id="search-availability"
             value={availability}
             onChange={(e) => onAvailabilityChange(e.target.value as Availability)}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            aria-label="Search Availability"
           >
             <option value="all">All</option>
             <option value="in_stock">In Stock</option>
@@ -83,6 +89,7 @@ export function SearchBar({
           <button
             onClick={onSearch}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
+            aria-label="Search Button"
           >
             <Search size={20} />
             Search

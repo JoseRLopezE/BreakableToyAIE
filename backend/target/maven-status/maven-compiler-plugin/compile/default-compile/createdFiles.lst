@@ -1,5 +1,10 @@
+com/breakabletoy/dto/MetricsResponse$MetricsByCategory.class
+com/breakabletoy/controller/GlobalExceptionHandler.class
 com/breakabletoy/Application.class
+com/breakabletoy/config/WebConfig.class
 com/breakabletoy/repository/ProductRepository.class
+com/breakabletoy/service/ProductService.class
+com/breakabletoy/config/WebConfig$1.class
+com/breakabletoy/dto/MetricsResponse.class
 com/breakabletoy/model/Product.class
 com/breakabletoy/controller/ProductController.class
-com/breakabletoy/service/ProductService.class

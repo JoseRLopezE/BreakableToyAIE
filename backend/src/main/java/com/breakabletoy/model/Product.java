@@ -1,12 +1,31 @@
 package com.breakabletoy.model;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class Product {
     private String id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String category;
+    @Min(0)
     private double price;
+    @Min(0)
     private int stock;
     private String expirationDate;
+
+    public Product() {}
+
+    public Product(String id, String name, String category, double price, int stock, String expirationDate) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.stock = stock;
+        this.expirationDate = expirationDate;
+    }
 
     // Getters and Setters
     public String getId() {

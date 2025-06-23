@@ -1,11 +1,18 @@
 import axios from 'axios';
-import { Product } from '../types';
+import { Product, Metrics } from '../types';
 
 const API_URL = 'http://localhost:9090/api/products';
 
 export const getProducts = async (): Promise<Product[]> => {
   const response = await axios.get(API_URL);
   return response.data;
+};
+
+export const getMetrics = async (): Promise<Metrics> => {
+  const response = await axios.get(`${API_URL}/metrics`);
+  // Convert backend response to Metrics type expected by frontend
+  const { categoryMetrics, overall } = response.data;
+  return { ...categoryMetrics, overall };
 };
 
 export const createProduct = async (product: Partial<Product>): Promise<Product> => {

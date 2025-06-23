@@ -1,1 +1,4 @@
+com/breakabletoy/controller/ProductControllerTest.class
+com/breakabletoy/controller/ProductSearchControllerTest.class
 com/breakabletoy/AppTest.class
+com/breakabletoy/controller/ProductCrudControllerTest.class

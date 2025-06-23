@@ -1,1 +1,4 @@
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/test/java/com/breakabletoy/AppTest.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/test/java/com/breakabletoy/AppTest.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/test/java/com/breakabletoy/controller/ProductControllerTest.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/test/java/com/breakabletoy/controller/ProductCrudControllerTest.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/test/java/com/breakabletoy/controller/ProductSearchControllerTest.java

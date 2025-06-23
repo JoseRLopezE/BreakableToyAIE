@@ -1,6 +1,8 @@
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/main/java/com/breakabletoy/Application.java
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/main/java/com/breakabletoy/config/WebConfig.java
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/main/java/com/breakabletoy/controller/ProductController.java
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/main/java/com/breakabletoy/model/Product.java
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/main/java/com/breakabletoy/repository/ProductRepository.java
-/Users/ramon.lopez/Documents/BreakableToy/backend/src/main/java/com/breakabletoy/service/ProductService.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/Application.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/config/WebConfig.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/controller/GlobalExceptionHandler.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/controller/ProductController.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/dto/MetricsResponse.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/model/Product.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/repository/ProductRepository.java
+/Users/ramon.lopez/Documents/BreakableToyAIE/BreakabletToyAIE/backend/src/main/java/com/breakabletoy/service/ProductService.java

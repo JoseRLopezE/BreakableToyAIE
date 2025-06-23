@@ -5,14 +5,13 @@ import { SearchBar } from './components/SearchBar';
 import { Metrics } from './components/Metrics';
 import { getExpirationColor, getStockColor, formatDate } from './utils/dateUtils';
 import { ProductModal } from './components/ProductModal';
-import { getProducts, createProduct, updateProduct, deleteProduct } from './services/api';
-import { INITIAL_CATEGORIES, INITIAL_PRODUCTS } from './utils/initialData';
+import { getProducts, getMetrics, createProduct, updateProduct, deleteProduct } from './services/api';
 
 const ITEMS_PER_PAGE = 10;
 
 function App() {
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-  const [categories, setCategories] = useState<string[]>(INITIAL_CATEGORIES);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [availability, setAvailability] = useState<Availability>('all');
@@ -24,43 +23,35 @@ function App() {
   const [metrics, setMetrics] = useState<MetricsType>({
     overall: { totalProducts: 0, totalValue: 0, averagePrice: 0 }
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
+    fetchMetrics();
   }, []);
 
-  useEffect(() => {
-    calculateMetrics();
-  }, [products]);
-
   const fetchProducts = async () => {
-    const data = await getProducts();
-    setProducts(data);
+    setError(null);
+    try {
+      const data = await getProducts();
+      setProducts(data);
+      // Extract unique categories from products
+      const uniqueCategories = Array.from(new Set(data.map((p: Product) => p.category)));
+      setCategories(uniqueCategories);
+    } catch (err) {
+      setError('Failed to load products. Please try again.');
+    }
   };
 
-  const calculateMetrics = () => {
-    const newMetrics: MetricsType = { overall: { totalProducts: 0, totalValue: 0, averagePrice: 0 } };
-    
-    categories.forEach(category => {
-      const categoryProducts = products.filter(p => p.category === category);
-      const totalProducts = categoryProducts.reduce((sum, p) => sum + p.stock, 0);
-      const totalValue = categoryProducts.reduce((sum, p) => sum + (p.price * p.stock), 0);
-      
-      newMetrics[category] = {
-        totalProducts,
-        totalValue,
-        averagePrice: totalProducts > 0 ? totalValue / totalProducts : 0
-      };
-      
-      newMetrics.overall.totalProducts += totalProducts;
-      newMetrics.overall.totalValue += totalValue;
-    });
-    
-    newMetrics.overall.averagePrice = newMetrics.overall.totalProducts > 0
-      ? newMetrics.overall.totalValue / newMetrics.overall.totalProducts
-      : 0;
-    
-    setMetrics(newMetrics);
+  const fetchMetrics = async () => {
+    setError(null);
+    try {
+      const data = await getMetrics();
+      setMetrics(data);
+    } catch (err) {
+      setError('Failed to load metrics. Please try again.');
+    }
   };
 
   const handleSort = (key: keyof Product) => {
@@ -72,9 +63,14 @@ function App() {
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this product?')) {
-      await deleteProduct(id);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      setSelectedProducts((prev) => prev.filter((productId) => productId !== id));
+      setError(null);
+      try {
+        await deleteProduct(id);
+        setProducts((prev) => prev.filter((p) => p.id !== id));
+        setSelectedProducts((prev) => prev.filter((productId) => productId !== id));
+      } catch (err) {
+        setError('Failed to delete product. Please try again.');
+      }
     }
   };
 
@@ -84,24 +80,32 @@ function App() {
   };
 
   const handleSave = async (productData: Partial<Product>) => {
+    setLoading(true);
+    setError(null);
     const now = new Date();
-    if (editingProduct) {
-      const updatedProduct = await updateProduct(editingProduct.id, { ...productData, updatedAt: now });
-      setProducts((prev) =>
-        prev.map((p) => (p.id === editingProduct.id ? updatedProduct : p))
-      );
-    } else {
-      const newProduct = await createProduct({ ...productData, createdAt: now, updatedAt: now });
-      setProducts((prev) => [...prev, newProduct]);
-      if (!categories.includes(newProduct.category)) {
-        setCategories((prev) => [...prev, newProduct.category]);
+    try {
+      if (editingProduct) {
+        const updatedProduct = await updateProduct(editingProduct.id, { ...productData, updatedAt: now });
+        setProducts((prev) =>
+          prev.map((p) => (p.id === editingProduct.id ? updatedProduct : p))
+        );
+      } else {
+        const newProduct = await createProduct({ ...productData, createdAt: now, updatedAt: now });
+        setProducts((prev) => [...prev, newProduct]);
+        if (!categories.includes(newProduct.category)) {
+          setCategories((prev) => [...prev, newProduct.category]);
+        }
       }
+      setIsModalOpen(false);
+      setEditingProduct(undefined);
+    } catch (err) {
+      setError('Failed to save product. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    setIsModalOpen(false);
-    setEditingProduct(undefined);
   };
 
-  const handleSelectProduct = async (id: string, checked: boolean) => {
+  const handleSelectProduct = (id: string, checked: boolean) => {
     const updatedProducts = products.map((product) => {
       if (product.id === id) {
         return { ...product, stock: checked ? 0 : 10 };
@@ -109,7 +113,7 @@ function App() {
       return product;
     });
     setProducts(updatedProducts);
-    setSelectedProducts((prev) => 
+    setSelectedProducts((prev) =>
       checked ? [...prev, id] : prev.filter(productId => productId !== id)
     );
   };
@@ -155,7 +159,9 @@ function App() {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Inventory Manager</h1>
-        
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+        )}
         <SearchBar
           searchTerm={searchTerm}
           selectedCategories={selectedCategories}
@@ -274,12 +280,14 @@ function App() {
                         <button
                           onClick={() => handleEdit(product)}
                           className="p-1 text-blue-600 hover:text-blue-800"
+                          aria-label="Edit"
                         >
                           <Edit size={20} />
                         </button>
                         <button
                           onClick={() => handleDelete(product.id)}
                           className="p-1 text-red-600 hover:text-red-800"
+                          aria-label="Delete"
                         >
                           <Trash size={20} />
                         </button>
@@ -321,6 +329,7 @@ function App() {
           onSave={handleSave}
           product={editingProduct}
           categories={categories}
+          loading={loading}
         />
       </div>
     </div>
